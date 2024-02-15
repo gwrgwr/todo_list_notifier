@@ -1,6 +1,6 @@
 # todo_list_notifier
 
-A new Flutter project.
+A new TODO list application but with ChangeNotifier class.
 
 ## Getting Started
 
