@@ -22,14 +22,15 @@ class _HomePageState extends State<HomePage> {
         backgroundColor: backgroundColor,
         centerTitle: true,
         title: Padding(
-          padding: const EdgeInsets.only(top: 40),
+          padding: const EdgeInsets.only(top: 30),
           child: Text(
             'Todo',
             style: TextStyle(
               color: Colors.white,
               fontSize: 26,
               fontWeight: FontWeight.w500,
-              letterSpacing: 2
+              letterSpacing: 2,
+              fontFamily: 'NunitoSans',
             ),
           ),
         ),
@@ -41,15 +42,52 @@ class _HomePageState extends State<HomePage> {
             itemCount: controller.todos.length,
             itemBuilder: (context, index) {
               final todo = controller.todos[index];
-              return ListTile(
-                title: Text(todo.title),
-                leading: Checkbox(
-                  value: controller.todos[index].completed,
-                  onChanged: (value) {
-                    setState(() {
-                      controller.todos[index].completed = value!;
-                    });
-                  },
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                child: Card(
+                  color: Colors.black.withOpacity(0.6),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 10),
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Transform.scale(
+                              scale: 1.2,
+                              child: Checkbox(
+                                value: controller.todos[index].completed,
+                                onChanged: (value) {
+                                  setState(() {
+                                    controller.todos[index].completed = value!;
+                                  });
+                                },
+                              ),
+                            ),
+                            Text(todo.title,style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 28,
+                              fontFamily: 'NunitoSans'
+                            )),
+                            IconButton(onPressed: () {}, icon: Icon(Icons.delete, color: Colors.white, size: 34,))
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            Text('Time left: ${todo.hoursRemaining} hours', style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 18
+                            ),),
+                            Text('${todo.hoursSpent} h', style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 18
+                            ),),
+                          ],
+                        )
+                      ],
+                    ),
+                  )
                 ),
               );
             },
@@ -57,13 +95,15 @@ class _HomePageState extends State<HomePage> {
         },
       ),
       floatingActionButton: FloatingActionButton(
+        child: Image.asset('assets/icons/pen_ink.png', width: 50, height: 50,),
         onPressed: () {
           setState(() {
             controller.addTodos(
               title: 'teste',
               completed: isCompleted,
-              hoursSpent: "13",
-              hoursRemaining: '13',
+              hoursSpent: "2",
+              hoursRemaining: '11',
+              colorCard: Colors.black.withOpacity(0.6)
             );
           });
         },
