@@ -1,4 +1,3 @@
-import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:flutter/material.dart';
 
 class DatePickerWidget extends StatefulWidget {
@@ -8,25 +7,55 @@ class DatePickerWidget extends StatefulWidget {
   State<DatePickerWidget> createState() => _DatePickerWidgetState();
 }
 
-List<DateTime?> _value = [DateTime.now()];
-
 class _DatePickerWidgetState extends State<DatePickerWidget> {
+  final TextEditingController _dateController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        TextButton(
-            onPressed: () {
-              showCalendarDatePicker2Dialog(
-                value: _value,
-                context: context,
-                config: CalendarDatePicker2WithActionButtonsConfig(),
-                dialogSize: const Size(400, 400),
-              );
-            },
-            child: Text('Select a date')),
-        Text(_value[0].toString())
+        Text("FINAL DATE:", style: TextStyle(
+          color: Colors.white,
+          fontSize: 20
+        ),),
+        SizedBox(height: 20,),
+        TextField(
+          controller: _dateController,
+          decoration: InputDecoration(
+              labelText: "DATE",
+              floatingLabelStyle: TextStyle(
+                fontSize: 20,
+                color: Colors.white,
+              ),
+              labelStyle: TextStyle(
+                color: Colors.white,
+              ),
+              filled: true,
+              fillColor: Colors.deepPurple.withOpacity(0.5),
+              prefixIcon: Icon(Icons.calendar_today),
+              enabledBorder: OutlineInputBorder(borderSide: BorderSide.none),
+              focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.deepPurple, width: 2))),
+          readOnly: true,
+          onTap: () => _selectDate(),
+        )
       ],
     );
+  }
+
+  Future<void> _selectDate() async {
+    DateTime? _picked = await showDatePicker(
+      context: context,
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2100),
+      initialDate: DateTime.now(),
+    );
+
+    if (_picked != null) {
+      setState(() {
+        _dateController.text = _picked.toString().split(" ")[0];
+      });
+    }
   }
 }

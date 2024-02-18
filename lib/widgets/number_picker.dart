@@ -22,11 +22,9 @@ class _NumberPickerWidgetState extends State<NumberPickerWidget> {
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
               colors: const [
-                Color.fromARGB(255, 64, 79, 110),
-                Color.fromARGB(255, 77, 94, 129),
-                Color.fromARGB(255, 91, 110, 148),
-                Color.fromARGB(255, 77, 94, 129),
-                Color.fromARGB(255, 64, 79, 110)
+                Color.fromARGB(255, 95, 15, 185),
+                Color.fromARGB(255, 100, 33, 163),
+                Color.fromARGB(255, 61, 14, 92)
               ])),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -36,67 +34,68 @@ class _NumberPickerWidgetState extends State<NumberPickerWidget> {
             style: TextStyle(
                 color: Colors.white, fontFamily: 'RobotoMono', fontSize: 24),
           ),
+          SizedBox(
+            height: 10,
+          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              NumberPicker(
-                  decoration: BoxDecoration(
-                      border: Border.symmetric(
-                          horizontal: BorderSide(color: Colors.black))),
-                  haptics: true,
-                  selectedTextStyle: TextStyle(
-                      color: Color.fromARGB(255, 255, 255, 255), fontSize: 28),
-                  textStyle: TextStyle(color: Colors.black, fontSize: 20),
-                  infiniteLoop: false,
-                  minValue: 0,
-                  maxValue: 12,
-                  value: _currentValueHour,
-                  onChanged: (value) {
-                    setState(() {
-                      _currentValueHour = value;
-                    });
-                  }),
-              NumberPicker(
-                  decoration: BoxDecoration(
-                      border: Border.symmetric(
-                          horizontal: BorderSide(color: Colors.black))),
-                  haptics: true,
-                  selectedTextStyle: TextStyle(
-                      color: Color.fromARGB(255, 255, 255, 255), fontSize: 28),
-                  textStyle: TextStyle(color: Colors.black, fontSize: 20),
-                  infiniteLoop: false,
-                  minValue: 0,
-                  maxValue: 59,
-                  value: _currentValueMinute,
-                  onChanged: (value) {
-                    setState(() {
-                      _currentValueMinute = value;
-                    });
-                  })
+              Column(
+                children: [
+                  Text(
+                    'Hours',
+                    style: TextStyle(color: Colors.white, fontSize: 19),
+                  ),
+                  NumberPicker(
+                      decoration: BoxDecoration(
+                          border: Border.symmetric(
+                              horizontal: BorderSide(color: Colors.black))),
+                      haptics: true,
+                      selectedTextStyle: TextStyle(
+                          color: Color.fromARGB(255, 255, 255, 255),
+                          fontSize: 28),
+                      textStyle: TextStyle(color: Colors.black, fontSize: 20),
+                      infiniteLoop: true,
+                      minValue: 0,
+                      maxValue: 99,
+                      value: _currentValueHour,
+                      onChanged: (value) {
+                        setState(() {
+                          _currentValueHour = value;
+                        });
+                      }),
+                ],
+              ),
+              Column(
+                children: [
+                  Text(
+                    'Minutes',
+                    style: TextStyle(color: Colors.white, fontSize: 19),
+                  ),
+                  NumberPicker(
+                      decoration: BoxDecoration(
+                          border: Border.symmetric(
+                              horizontal: BorderSide(color: Colors.black))),
+                      haptics: true,
+                      selectedTextStyle: TextStyle(
+                          color: Color.fromARGB(255, 255, 255, 255),
+                          fontSize: 28),
+                      textStyle: TextStyle(color: Colors.black, fontSize: 20),
+                      infiniteLoop: true,
+                      minValue: 0,
+                      maxValue: 59,
+                      value: _currentValueMinute,
+                      onChanged: (value) {
+                        setState(() {
+                          _currentValueMinute = value;
+                        });
+                      }),
+                ],
+              )
             ],
           ),
-          Text("Spending ${valueHoursHigher()} : ${valueMinutesHigher()} hours in this task", style: TextStyle(
-            color: Colors.white,
-            fontSize: 17
-          ),),
         ],
       ),
     );
-  }
-
-  dynamic valueHoursHigher() {
-    if (_currentValueHour <= 9) {
-      return "0$_currentValueHour";
-    } else {
-      return _currentValueHour;
-    }
-  }
-
-  dynamic valueMinutesHigher() {
-    if (_currentValueMinute <= 9) {
-      return "0$_currentValueMinute";
-    } else {
-      return _currentValueMinute;
-    }
   }
 }
