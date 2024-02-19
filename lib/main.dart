@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:todo_list_notifier/pages/add_task_page.dart';
-import 'package:todo_list_notifier/pages/color_picker_page.dart';
-import 'package:todo_list_notifier/pages/home_page.dart';
-import 'package:todo_list_notifier/widgets/color_picker.dart';
+import 'package:todo_list_notifier/data/background_color.dart';
+import 'package:todo_list_notifier/pages/login_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -14,14 +12,17 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
+    return BackgroundColor(
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'Flutter Demo',
+        theme: ThemeData(
+          dividerTheme: DividerThemeData(color: Colors.transparent),
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+          useMaterial3: true,
+        ),
+        home: LoginPage(),
       ),
-      home: HomePage(),
     );
   }
 }

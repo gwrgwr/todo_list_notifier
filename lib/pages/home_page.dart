@@ -1,132 +1,112 @@
 import 'package:flutter/material.dart';
-import 'package:todo_list_notifier/controllers/home_controller.dart';
-import 'package:todo_list_notifier/pages/add_task_page.dart';
+import 'package:todo_list_notifier/data/background_color.dart';
+import 'package:todo_list_notifier/models/drawer_list_mode.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class HomePage extends StatelessWidget {
+  HomePage({required this.name, super.key});
 
-  @override
-  State<HomePage> createState() => _HomePageState();
-}
+  final TextEditingController name;
 
-class _HomePageState extends State<HomePage> {
-  final controller = HomeController();
-  final Color backgroundColor = Color(0xff5F6D89);
+  List<DrawerList> list = [];
 
-  bool isCompleted = false;
+  void _getList() {
+    list = DrawerList.getDrawerList();
+  }
 
   @override
   Widget build(BuildContext context) {
+    _getList();
+    final bgColorLight = BackgroundColor.of(context)?.backgroundColorLight;
+    final bgColorDark = BackgroundColor.of(context)!.backgroundColorDark;
+    final GlobalKey<ScaffoldState> _key = GlobalKey();
+
     return Scaffold(
-      backgroundColor: backgroundColor,
-      appBar: AppBar(
-        backgroundColor: backgroundColor,
-        centerTitle: true,
-        title: Padding(
-          padding: const EdgeInsets.only(top: 30),
-          child: Text(
-            'Todo',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 26,
-              fontWeight: FontWeight.w500,
-              letterSpacing: 2,
-              fontFamily: 'NunitoSans',
+      key: _key,
+      backgroundColor: bgColorLight,
+      drawer: Drawer(
+        backgroundColor: bgColorDark,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(right: 30, top: 30),
+              child: Align(
+                alignment: Alignment.topRight,
+                child: Container(
+                  padding: EdgeInsets.all(5.0),
+                  decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: Colors.white.withOpacity(0.4),
+                      )),
+                  child: IconButton(
+                    icon: Icon(
+                      Icons.arrow_back,
+                      color: Colors.white,
+                    ),
+                    onPressed: () {
+                      _key.currentState!.closeDrawer();
+                    },
+                  ),
+                ),
+              ),
             ),
-          ),
-        ),
-      ),
-      body: AnimatedBuilder(
-        animation: controller,
-        builder: (context, child) {
-          return ListView.builder(
-            itemCount: controller.todos.length,
-            itemBuilder: (context, index) {
-              final todo = controller.todos[index];
-              return Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-                child: Card(
-                    color: Colors.black.withOpacity(0.6),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 0, vertical: 10),
-                      child: Column(
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              Transform.scale(
-                                scale: 1.2,
-                                child: Checkbox(
-                                  value: controller.todos[index].completed,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      controller.todos[index].completed =
-                                          value!;
-                                    });
-                                  },
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                SizedBox(
+                  height: 400,
+                  width: 200,
+                  child: ListView.separated(
+                      itemBuilder: (context, index) {
+                        return GestureDetector(
+                          onTap: () {},
+                          child: Container(
+                            padding: EdgeInsets.all(10.0),
+                            decoration: BoxDecoration(
+                              color: bgColorLight,
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                list[index].icon,
+                                SizedBox(
+                                  width: 30,
                                 ),
-                              ),
-                              Text(todo.title,
+                                Text(
+                                  list[index].name,
                                   style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 28,
-                                      fontFamily: 'NunitoSans')),
-                              IconButton(
-                                  onPressed: () {},
-                                  icon: Icon(
-                                    Icons.delete,
-                                    color: Colors.white,
-                                    size: 34,
-                                  ))
-                            ],
+                                      color: Colors.white, fontSize: 20),
+                                )
+                              ],
+                            ),
                           ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              Text(
-                                'Time left: ${todo.hoursRemaining} hours',
-                                style: TextStyle(
-                                    color: Colors.white, fontSize: 18),
-                              ),
-                              Text(
-                                '${todo.hoursSpent} h',
-                                style: TextStyle(
-                                    color: Colors.white, fontSize: 18),
-                              ),
-                            ],
-                          )
-                        ],
-                      ),
-                    )),
-              );
-            },
-          );
-        },
-      ),
-      floatingActionButton: FloatingActionButton(
-        child: Image.asset(
-          'assets/icons/pen_ink.png',
-          width: 50,
-          height: 50,
+                        );
+                      },
+                      separatorBuilder: (context, index) => SizedBox(
+                            height: 20,
+                          ),
+                      itemCount: list.length),
+                )
+              ],
+            ),
+            Text('Google')
+          ],
         ),
-        onPressed: () {
-          setState(() {
-            controller.addTodos(
-              title: 'teste',
-              completed: isCompleted,
-              hoursSpent: "2",
-              hoursRemaining: '11',
-              colorCard: Colors.black.withOpacity(0.6),
-            );
-            Navigator.push(context, MaterialPageRoute(
-              builder: (context) {
-                return AddTaskPage();
-              },
-            ));
-          });
-        },
+      ),
+      appBar: AppBar(
+        backgroundColor: bgColorLight,
+        leading: IconButton(
+          icon: Icon(
+            Icons.menu,
+            color: Colors.white.withOpacity(0.4),
+          ),
+          onPressed: () {
+            _key.currentState!.openDrawer();
+          },
+        ),
       ),
     );
   }
