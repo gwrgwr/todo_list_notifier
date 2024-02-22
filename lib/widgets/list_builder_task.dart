@@ -16,39 +16,43 @@ class ListBuilderTask extends StatefulWidget {
 class _ListBuilderTaskState extends State<ListBuilderTask> {
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      leading: Transform.scale(
-        scale: 1.2,
-        child: Checkbox(
-          value: widget.taskItem.isFinished,
-          onChanged: (value) {
-            setState(() {
-              widget.taskItem.isFinished = value;
-            });
-          },
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      decoration: BoxDecoration(color: Color.fromARGB(255, 8, 23, 110), borderRadius: BorderRadius.circular(20)),
+      child: ListTile(
+        leading: Transform.scale(
+          scale: 1.2,
+          child: Checkbox(
+            value: widget.taskItem.isFinished,
+            onChanged: (value) {
+              setState(() {
+                widget.taskItem.isFinished = value;
+              });
+            },
+          ),
         ),
-      ),
-      titleAlignment: ListTileTitleAlignment.center,
-      title: Center(
-        child: Text(
-          widget.taskItem.name,
-          style: TextStyle(
-              decoration: widget.taskItem.isFinished!
-                  ? TextDecoration.lineThrough
-                  : null,
-              fontSize: 20,
-              color: Colors.white),
+        titleAlignment: ListTileTitleAlignment.center,
+        title: Center(
+          child: Text(
+            widget.taskItem.name,
+            style: TextStyle(
+                decoration: widget.taskItem.isFinished!
+                    ? TextDecoration.lineThrough
+                    : null,
+                fontSize: 20,
+                color: Colors.white),
+          ),
         ),
-      ),
-      trailing: IconButton(
-        icon: Icon(
-          Icons.delete,
-          color: widget.taskItem.isFinished!
-              ? Colors.white.withOpacity(0.4)
-              : Colors.transparent,
-          size: 32,
+        trailing: IconButton(
+          icon: Icon(
+            Icons.delete,
+            color: widget.taskItem.isFinished!
+                ? Colors.white.withOpacity(0.4)
+                : Colors.transparent,
+            size: 32,
+          ),
+          onPressed: widget.onDelete,
         ),
-        onPressed: widget.onDelete,
       ),
     );
   }
